@@ -1,0 +1,35 @@
+#!/usr/bin/make -f
+
+export DH_VERBOSE = 1
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@ --with autoreconf
+
+override_dh_auto_configure:
+	dh_update_autotools_config
+	dh_auto_configure -- \
+	    --sysconfdir=/etc \
+	    --localstatedir=/var \
+	    --disable-silent-rules \
+	    --disable-gpg \
+	    --disable-openssl \
+	    --enable-usign \
+	    --enable-sha256 \
+	    --enable-curl \
+	    --enable-ssl-curl \
+	    --without-libsolv
+
+override_dh_auto_test:
+	true
+
+override_dh_auto_install:
+	dh_auto_install
+	rm -f debian/tmp/usr/bin/opkg-key
+	rm -f debian/tmp/usr/bin/opkg-check-config
+	\
+	install -d -m 0755 debian/tmp/etc/sysctl.d
+	install -m 0644 debian/unprivileged-userns.conf debian/tmp/etc/sysctl.d
+	\
+	install -d -m 0755 debian/tmp/usr/include/opkg
+	find libopkg -name "*.h" -exec install -m 644 '{}' debian/tmp/usr/include/opkg/ ';'

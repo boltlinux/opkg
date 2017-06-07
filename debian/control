@@ -1,0 +1,50 @@
+Source: opkg
+Priority: optional
+Maintainer: Tobias Koch <tobias.koch@gmail.com>
+Build-Depends:
+ debhelper (>= 9),
+ libsolv-dev,
+ libsolvext-dev,
+ libcurl4-nss-dev,
+ libarchive-dev,
+ pkg-config
+Standards-Version: 3.9.8
+Section: admin
+
+Package: opkg
+Architecture: any
+Depends: libopkg1 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Description: OPKG - tiny yet powerful package manager
+ Opkg is a lightweight package management system. It is written in C and resembles
+ apt/dpkg in operation. It is intended for use on embedded Linux devices.
+ .
+ Opkg is maintained, stable, robust and conservative in its memory usage. As best it
+ can, opkg maintains backwards compatibility with ipkg and conforms to a subset of
+ Debian's Policy Manual regarding control files.
+
+Package: libopkg1
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, usign
+Description: OPKG - tiny yet powerful package manager (runtime libs)
+ Opkg is a lightweight package management system. It is written in C and resembles
+ apt/dpkg in operation. It is intended for use on embedded Linux devices.
+ .
+ Opkg is maintained, stable, robust and conservative in its memory usage. As best it
+ can, opkg maintains backwards compatibility with ipkg and conforms to a subset of
+ Debian's Policy Manual regarding control files.
+ .
+ This package contains the runtime library.
+
+Package: libopkg-dev
+Section: libdevel
+Architecture: any
+Depends: libopkg1 (= ${binary:Version}), ${misc:Depends}
+Description: OPKG - tiny yet powerful package manager (development)
+ Opkg is a lightweight package management system. It is written in C and resembles
+ apt/dpkg in operation. It is intended for use on embedded Linux devices.
+ .
+ Opkg is maintained, stable, robust and conservative in its memory usage. As best it
+ can, opkg maintains backwards compatibility with ipkg and conforms to a subset of
+ Debian's Policy Manual regarding control files.
+ .
+ This package contains headers and libraries for development.

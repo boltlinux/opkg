@@ -1,0 +1,19 @@
+opkg (0.4.4~0-0bolt1) unstable; urgency=medium
+
+  * Upgrade to upstream 0.4.4-SNAPSHOT
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Sat, 04 Jul 2020 23:28:20 +0200
+
+opkg (0.4.2~0-0bolt1) unstable; urgency=medium
+
+  * Call usign (signify variant) for signature verification
+  * Key import script for usign keys
+  * Run maintainer scripts in chroot
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Mon, 07 Oct 2019 10:33:01 +0300
+
+opkg (0.4.1-0bolt1) unstable; urgency=medium
+
+  * Initial release
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Wed, 07 Jun 2017 13:37:01 +0300

@@ -1,0 +1,12 @@
+diff --git a/libopkg/opkg_conf.c b/libopkg/opkg_conf.c
+index f2330cd..fbe420f 100644
+--- a/libopkg/opkg_conf.c
++++ b/libopkg/opkg_conf.c
+@@ -62,6 +62,7 @@ static opkg_option_t options[] = {
+     {"force_space", OPKG_OPT_TYPE_BOOL, &_conf.force_space},
+     {"force_postinstall", OPKG_OPT_TYPE_BOOL, &_conf.force_postinstall},
+     {"force_checksum", OPKG_OPT_TYPE_BOOL, &_conf.force_checksum},
++    {"force_removal_of_dependent_packages", OPKG_OPT_TYPE_BOOL, &_conf.force_removal_of_dependent_packages},
+     {"autoremove", OPKG_OPT_TYPE_BOOL, &_conf.autoremove},
+     {"check_signature", OPKG_OPT_TYPE_BOOL, &_conf.check_signature},
+     {"check_pkg_signature", OPKG_OPT_TYPE_BOOL, &_conf.check_pkg_signature},

@@ -1,0 +1,11 @@
+diff -urN a/configure.ac b/configure.ac
+--- a/configure.ac	2017-03-23 14:42:06.000000000 +0300
++++ b/configure.ac	2017-03-24 12:19:47.262331794 +0300
+@@ -128,7 +128,6 @@
+ if test "x$want_curl" = "xyes" -a "x$want_sslcurl" = "xyes"; then
+   AC_DEFINE(HAVE_CURL, 1, [Define if you want CURL support])
+   AC_DEFINE(HAVE_SSLCURL, 1, [Define if you want certificate authentication with curl])
+-  NEED_SSL_LIBS="yes"
+ fi
+ 
+ if test "x$NEED_SSL_LIBS" = "xyes"; then
