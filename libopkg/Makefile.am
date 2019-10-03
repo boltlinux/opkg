@@ -44,6 +44,10 @@ if HAVE_GPGME
 opkg_sources += opkg_gpg.c
 opkg_headers += opkg_gpg.h
 endif
+if HAVE_USIGN
+opkg_sources += opkg_usign.c
+opkg_headers += opkg_usign.h
+endif
 if HAVE_LIBOPKG_API
 opkg_sources += opkg.c
 opkg_headers += opkg.h

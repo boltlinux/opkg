@@ -55,6 +55,20 @@ int opkg_verify_openssl_signature(const char *file, const char *sigfile)
 }
 #endif
 
+#ifdef HAVE_USIGN
+#include "opkg_usign.h"
+#else
+/* Dummy usign signature verification. */
+int opkg_verify_usign_signature(const char *file, const char *sigfile)
+{
+    (void)file;
+    (void)sigfile;
+
+    opkg_msg(ERROR, "uSign signature checking not supported\n");
+    return -1;
+}
+#endif
+
 int opkg_verify_md5sum(const char *file, const char *md5sum)
 {
     int r;
@@ -106,6 +120,8 @@ int opkg_verify_signature(const char *file, const char *sigfile)
         return opkg_verify_gpg_signature(file, sigfile);
     else if (strcmp(opkg_config->signature_type, "openssl") == 0)
         return opkg_verify_openssl_signature(file, sigfile);
+    else if (strcmp(opkg_config->signature_type, "usign") == 0)
+        return opkg_verify_usign_signature(file, sigfile);
 
     opkg_msg(ERROR, "signature_type option '%s' not understood.\n",
              opkg_config->signature_type);

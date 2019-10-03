@@ -143,6 +143,17 @@ removed in future releases. Consider using GPGME (--enable-gpg) instead.)
 fi
 AM_CONDITIONAL(HAVE_OPENSSL, test "x$want_openssl" = "xyes")
 
+# check for usign
+AC_ARG_ENABLE(usign,
+              AC_HELP_STRING([--enable-usign], [Enable signature verification with usign
+      [[default=no]] ]),
+    [want_usign="$enableval"], [want_usign="no"])
+
+if test "x$want_usign" = "xyes"; then
+  AC_DEFINE(HAVE_USIGN, 1, [Define if you want usign support])
+fi
+AM_CONDITIONAL(HAVE_USIGN, test "x$want_usign" = "xyes")
+
 # check for libssl-curl
 AC_ARG_ENABLE(ssl-curl,
               AC_HELP_STRING([--enable-ssl-curl], [Enable certificate authentication with curl
