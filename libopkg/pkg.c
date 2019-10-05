@@ -1301,6 +1301,19 @@ conffile_t *pkg_get_conffile(pkg_t * pkg, const char *file_name)
     return NULL;
 }
 
+static const char *strip_offline_root(const char *file_name)
+{
+    unsigned int len;
+
+    if (opkg_config->offline_root) {
+        len = strlen(opkg_config->offline_root);
+        if (strncmp(file_name, opkg_config->offline_root, len) == 0)
+            file_name += len;
+    }
+
+    return file_name;
+}
+
 int pkg_run_script(pkg_t * pkg, const char *script, const char *args)
 {
     int err;
@@ -1309,12 +1322,6 @@ int pkg_run_script(pkg_t * pkg, const char *script, const char *args)
 
     if (opkg_config->noaction)
         return 0;
-
-    if (opkg_config->offline_root && !opkg_config->force_postinstall) {
-        opkg_msg(INFO, "Offline root mode: not running %s.%s.\n", pkg->name,
-                 script);
-        return 0;
-    }
 
     /* Installed packages have scripts in pkg->dest->info_dir, uninstalled packages
      * have scripts in pkg->tmp_unpack_dir. */
@@ -1346,18 +1353,23 @@ int pkg_run_script(pkg_t * pkg, const char *script, const char *args)
         return 0;
     }
 
-    sprintf_alloc(&cmd, "%s %s", path, args);
+    const char *tmp_path = path;
+
+    if(opkg_config->offline_root) {
+        tmp_path = strip_offline_root(path);
+    }
+
+    sprintf_alloc(&cmd, "%s %s", tmp_path, args);
     free(path);
     {
         const char *argv[] = { "/bin/sh", "-c", cmd, NULL };
-        err = xsystem(argv);
+        err = xsystem_offline_root(argv);
     }
     free(cmd);
 
     if (err) {
-        if (!opkg_config->offline_root)
-            opkg_msg(ERROR, "package \"%s\" %s script returned status %d.\n",
-                     pkg->name, script, err);
+        opkg_msg(ERROR, "package \"%s\" %s script returned status %d.\n",
+                 pkg->name, script, err);
         return err;
     }
 

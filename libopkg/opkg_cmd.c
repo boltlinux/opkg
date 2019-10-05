@@ -228,7 +228,7 @@ static int opkg_finalize_intercepts(opkg_intercept_t ctx)
             if (access(path, X_OK) == 0) {
                 const char *argv[] = { "/bin/sh", "-c", path, NULL };
                 opkg_msg(DEBUG, "Run intercepted script %s\n", path);
-                xsystem(argv);
+                xsystem_offline_root(argv);
             }
             free(path);
         }
@@ -339,11 +339,6 @@ static int opkg_configure_packages(char *pkg_name)
     opkg_intercept_t ic;
     int r, err = 0;
 
-    if (opkg_config->offline_root && !opkg_config->force_postinstall) {
-        opkg_msg(INFO,
-                 "Offline root mode: not configuring unpacked packages.\n");
-        return 0;
-    }
     opkg_msg(INFO, "Configuring unpacked packages.\n");
 
     all = pkg_vec_alloc();
@@ -381,8 +376,7 @@ static int opkg_configure_packages(char *pkg_name)
                 pkg->state_flag &= ~SF_PREFER;
                 opkg_state_changed++;
             } else {
-                if (!opkg_config->offline_root)
-                    err = -1;
+                err = -1;
             }
         }
     }
