@@ -1,3 +1,9 @@
+opkg (0.4.4~1-0bolt1) unstable; urgency=medium
+
+  * Integrate latest fixes from master
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Sun, 04 Oct 2020 12:34:30 +0300
+
 opkg (0.4.4~0-0bolt1) unstable; urgency=medium
 
   * Upgrade to upstream 0.4.4-SNAPSHOT
