@@ -1,3 +1,9 @@
+opkg (0.4.4~1-0bolt2) unstable; urgency=medium
+
+  * Enable user namespaces in postinstall script.
+
+ -- Tobias Koch <tobias.koch@arculus.de>  Sun, 25 Oct 2020 11:11:30 +0300
+
 opkg (0.4.4~1-0bolt1) unstable; urgency=medium
 
   * Integrate latest fixes from master
