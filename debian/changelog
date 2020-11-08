@@ -1,3 +1,9 @@
+opkg (0.4.4~2-0bolt3) unstable; urgency=medium
+
+  * Add patch to allow curl backend to resume downloads.
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Mon, 09 Nov 2020 01:04:43 +0300
+
 opkg (0.4.4~1-0bolt2) unstable; urgency=medium
 
   * Enable user namespaces in postinstall script.
