@@ -18,7 +18,7 @@ index cfd812f..e00acac 100644
  
      /* Check size to mitigate hash collisions. */
      if (pkg_stat.st_size < 1 || pkg_stat.st_size != pkg->size) {
-+#ifdef defined(HAVE_SHA256) && defined(HAVE_CURL)
++#if defined(HAVE_SHA256) && defined(HAVE_CURL)
 +        /*
 +         * It should be safe to assume that there won't be collisions when
 +         * sha256 is used. So in case the size of the cached artifact is
