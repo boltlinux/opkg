@@ -1,8 +1,6 @@
-diff --git a/libopkg/opkg_remove.c b/libopkg/opkg_remove.c
-index 3936628..098fbab 100644
 --- a/libopkg/opkg_remove.c
 +++ b/libopkg/opkg_remove.c
-@@ -171,7 +171,16 @@ int opkg_remove_pkg(pkg_t * pkg)
+@@ -208,7 +208,16 @@
      int r;
  
      if (opkg_config->download_only)
@@ -20,11 +18,9 @@ index 3936628..098fbab 100644
      /*
       * If called from an upgrade and not from a normal remove,
       * ignore the essential flag.
-diff --git a/libopkg/solvers/internal/opkg_action.c b/libopkg/solvers/internal/opkg_action.c
-index 2043a56..7151dca 100644
 --- a/libopkg/solvers/internal/opkg_action.c
 +++ b/libopkg/solvers/internal/opkg_action.c
-@@ -51,7 +51,6 @@ int opkg_solver_remove(int num_pkgs, char **pkg_names)
+@@ -53,7 +53,6 @@
      pkg_t *pkg;
      pkg_t *pkg_to_remove;
      pkg_vec_t *available, *pkgs_to_remove;
@@ -32,7 +28,7 @@ index 2043a56..7151dca 100644
  
      available = pkg_vec_alloc();
      pkgs_to_remove = pkg_vec_alloc();
-@@ -77,13 +76,6 @@ int opkg_solver_remove(int num_pkgs, char **pkg_names)
+@@ -79,13 +78,6 @@
                  opkg_msg(ERROR, "Package %s not installed.\n", pkg->name);
                  continue;
              }
@@ -46,7 +42,7 @@ index 2043a56..7151dca 100644
  
              /* only attempt to remove dependent installed packages if
               * force_depends is not specified or the package is being
-@@ -131,12 +123,10 @@ int opkg_solver_remove(int num_pkgs, char **pkg_names)
+@@ -133,12 +125,10 @@
          if (opkg_remove_pkg(pkgs_to_remove->pkgs[i])) {
              err = -1;
              break;

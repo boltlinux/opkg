@@ -1,7 +1,6 @@
-diff -urN a/libopkg/pkg.c b/libopkg/pkg.c
---- a/libopkg/pkg.c	2019-08-11 17:40:36.000000000 +0200
-+++ b/libopkg/pkg.c	2019-10-03 11:16:38.842669659 +0200
-@@ -752,9 +752,9 @@
+--- a/libopkg/pkg.c
++++ b/libopkg/pkg.c
+@@ -755,9 +755,9 @@
              if (pkg->section) {
                  fprintf(fp, "Section: %s\n", pkg->section);
              }
@@ -13,10 +12,9 @@ diff -urN a/libopkg/pkg.c b/libopkg/pkg.c
              }
          } else if (strcasecmp(field, "Size") == 0) {
              if (pkg->size) {
-diff -urN a/libopkg/pkg_parse.c b/libopkg/pkg_parse.c
---- a/libopkg/pkg_parse.c	2019-08-11 17:40:36.000000000 +0200
-+++ b/libopkg/pkg_parse.c	2019-10-03 11:16:46.026633360 +0200
-@@ -250,8 +250,8 @@
+--- a/libopkg/pkg_parse.c
++++ b/libopkg/pkg_parse.c
+@@ -252,8 +252,8 @@
      case 'S':
          if ((mask & PFM_SECTION) && is_field("Section", line))
              pkg->section = parse_simple("Section", line);
