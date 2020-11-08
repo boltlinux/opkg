@@ -1,3 +1,9 @@
+opkg (0.4.4~2-0bolt3.1) unstable; urgency=medium
+
+  * Fix curl resume uploads patch...
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Mon, 09 Nov 2020 01:48:33 +0300
+
 opkg (0.4.4~2-0bolt3) unstable; urgency=medium
 
   * Add patch to allow curl backend to resume downloads.
@@ -8,7 +14,7 @@ opkg (0.4.4~1-0bolt2) unstable; urgency=medium
 
   * Enable user namespaces in postinstall script.
 
- -- Tobias Koch <tobias.koch@arculus.de>  Sun, 25 Oct 2020 11:11:30 +0300
+ -- Tobias Koch <tobias.koch@gmail.com>  Sun, 25 Oct 2020 11:11:30 +0300
 
 opkg (0.4.4~1-0bolt1) unstable; urgency=medium
 
