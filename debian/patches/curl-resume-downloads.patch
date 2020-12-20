@@ -1,8 +1,6 @@
-diff --git a/libopkg/opkg_download_curl.c b/libopkg/opkg_download_curl.c
-index 17ad3a4..6301dfc 100644
 --- a/libopkg/opkg_download_curl.c
 +++ b/libopkg/opkg_download_curl.c
-@@ -345,6 +345,7 @@ int opkg_download_backend(const char *src, const char *dest,
+@@ -345,6 +345,7 @@
      res = 0;
      curl_easy_setopt(curl, CURLOPT_WRITEDATA, file);
      res = curl_easy_perform(curl);
@@ -10,11 +8,9 @@ index 17ad3a4..6301dfc 100644
      fclose(file);
      if (res) {
          long error_code;
-diff --git a/libopkg/pkg.c b/libopkg/pkg.c
-index cfd812f..e00acac 100644
 --- a/libopkg/pkg.c
 +++ b/libopkg/pkg.c
-@@ -1555,6 +1555,16 @@ int pkg_verify(pkg_t * pkg)
+@@ -1543,6 +1543,16 @@
  
      /* Check size to mitigate hash collisions. */
      if (pkg_stat.st_size < 1 || pkg_stat.st_size != pkg->size) {

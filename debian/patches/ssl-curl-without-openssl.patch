@@ -1,6 +1,6 @@
 --- a/configure.ac
 +++ b/configure.ac
-@@ -159,7 +159,6 @@
+@@ -148,7 +148,6 @@
  if test "x$want_curl" = "xyes" -a "x$want_sslcurl" = "xyes"; then
    AC_DEFINE(HAVE_CURL, 1, [Define if you want CURL support])
    AC_DEFINE(HAVE_SSLCURL, 1, [Define if you want certificate authentication with curl])

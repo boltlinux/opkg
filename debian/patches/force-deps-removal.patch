@@ -1,6 +1,6 @@
 --- a/libopkg/opkg_conf.c
 +++ b/libopkg/opkg_conf.c
-@@ -64,6 +64,7 @@
+@@ -63,6 +63,7 @@
      {"force_space", OPKG_OPT_TYPE_BOOL, &_conf.force_space},
      {"force_postinstall", OPKG_OPT_TYPE_BOOL, &_conf.force_postinstall},
      {"force_checksum", OPKG_OPT_TYPE_BOOL, &_conf.force_checksum},
