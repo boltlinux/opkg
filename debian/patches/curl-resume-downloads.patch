@@ -8,22 +8,3 @@
      fclose(file);
      if (res) {
          long error_code;
---- a/libopkg/pkg.c
-+++ b/libopkg/pkg.c
-@@ -1543,6 +1543,16 @@
- 
-     /* Check size to mitigate hash collisions. */
-     if (pkg_stat.st_size < 1 || pkg_stat.st_size != pkg->size) {
-+#if defined(HAVE_SHA256) && defined(HAVE_CURL)
-+        /*
-+         * It should be safe to assume that there won't be collisions when
-+         * sha256 is used. So in case the size of the cached artifact is
-+         * smaller than its expected size, assume the download was interrupted
-+         * and allow the curl backend to resume downloading.
-+         */
-+        if (pkg_stat.st_size < pkg->size)
-+            return 1;
-+#endif
-         err = -1;
-         opkg_msg(ERROR, "File size mismatch: %s is %lld bytes, expecting %lu bytes\n",
-             pkg->local_filename, (long long int)pkg_stat.st_size, pkg->size);
