@@ -1,3 +1,9 @@
+opkg (0.4.4-1bolt1) unstable; urgency=medium
+
+  * opkg clean is a noop while operating on a buildbox target
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Fri, 25 Dec 2020 22:23:07 +0300
+
 opkg (0.4.4-0bolt1) unstable; urgency=medium
 
   * New release based on upstream tag 0.4.4
