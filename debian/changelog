@@ -1,3 +1,11 @@
+opkg (0.4.4-0bolt1) unstable; urgency=medium
+
+  * New release based on upstream tag 0.4.4
+  * Hack opkg to allow parallel downloads into same package cache while
+    in build box target.
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Fri, 25 Dec 2020 20:10:51 +0300
+
 opkg (0.4.4~2-0bolt3.1) unstable; urgency=medium
 
   * Fix curl resume uploads patch...
