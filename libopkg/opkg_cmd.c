@@ -38,6 +38,7 @@
 #include "sprintf_alloc.h"
 #include "file_util.h"
 #include "opkg_utils.h"
+#include "opkg_utils_bolt.h"
 #include "opkg_download.h"
 #include "opkg_install.h"
 #include "opkg_remove.h"
@@ -766,8 +767,12 @@ static int opkg_configure_cmd(int argc, char **argv)
 
 static int opkg_clean_cmd(int argc, char **argv)
 {
-    int err;
-    err = rm_r(opkg_config->cache_dir);
+    int err = 0;
+
+    if (!get_bbox_target_name()) {
+        err = rm_r(opkg_config->cache_dir);
+    }
+
     return err;
 }
 
