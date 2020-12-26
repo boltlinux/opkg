@@ -1,3 +1,12 @@
+opkg (0.4.4-2bolt1) unstable; urgency=medium
+
+  * Refreshed patch set.
+    - Look for usign also in /tools/bin
+    - Don't remove cache if operating on build box target
+    - Various tweaks and fixes to existing patches
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Sat, 26 Dec 2020 13:26:06 +0300
+
 opkg (0.4.4-1bolt1) unstable; urgency=medium
 
   * opkg clean is a noop while operating on a buildbox target
