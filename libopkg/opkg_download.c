@@ -124,14 +124,17 @@ static int opkg_download_internal(const char *src, const char *dest,
                            curl_progress_func cb, void *data, int use_cache)
 {
     int ret = 0;
+    int is_local_file = 0;
 
     char *download_to_file = (char*) dest;
 
     if (use_cache) {
         ret = file_mkdir_hier(opkg_config->cache_dir, 0755);
-        if (ret != 0)
+        if (ret != 0) {
             opkg_perror(ERROR, "Creating cache dir %s failed",
                     opkg_config->cache_dir);
+            goto cleanup;
+        }
 
         char *bbox_target_name = get_bbox_target_name();
 
@@ -151,6 +154,8 @@ static int opkg_download_internal(const char *src, const char *dest,
             /* Error message already printed? */
             goto cleanup;
         }
+
+        is_local_file = 1;
     } else {
         ret = opkg_download_set_env();
         if (ret != 0) {
@@ -166,7 +171,9 @@ static int opkg_download_internal(const char *src, const char *dest,
         }
     }
 
-    if (download_to_file != dest && !file_is_symlink(download_to_file)) {
+    if (download_to_file != dest &&
+            (is_local_file || !file_is_symlink(download_to_file)))
+    {
         ret = rename(download_to_file, dest);
         if (ret != 0) {
             opkg_perror(ERROR, "Failed to rename %s to %s",
@@ -177,7 +184,7 @@ static int opkg_download_internal(const char *src, const char *dest,
         char *tmp = xstrdup(dest);
 
         if(!symlink(basename(tmp), download_to_file)) {
-            /* We don't care too much about the result. */
+            /* ignore */
         }
 
         free(tmp);
