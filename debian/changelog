@@ -1,3 +1,9 @@
+opkg (0.4.4-3bolt1) unstable; urgency=medium
+
+  * Fix parallel downloads broke local package installation.
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Tue, 05 Jan 2021 00:10:51 +0300
+
 opkg (0.4.4-2bolt1) unstable; urgency=medium
 
   * Refreshed patch set.
