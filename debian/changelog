@@ -1,3 +1,10 @@
+opkg (0.4.5-0bolt1) unstable; urgency=medium
+
+  * Actually call /tools/bin/usign when found instead of hard-coded
+    /usr/bin/usign.
+
+ -- Tobias Koch <tobias.koch@gmail.com>  Sat, 26 Jun 2021 01:19:45 +0300
+
 opkg (0.4.4-3bolt1) unstable; urgency=medium
 
   * Fix parallel downloads broke local package installation.
