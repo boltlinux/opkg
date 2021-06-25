@@ -38,6 +38,7 @@
 #include "sprintf_alloc.h"
 #include "file_util.h"
 #include "opkg_utils.h"
+#include "opkg_utils_bolt.h"
 #include "opkg_download.h"
 #include "opkg_install.h"
 #include "opkg_remove.h"
@@ -228,7 +229,7 @@ static int opkg_finalize_intercepts(opkg_intercept_t ctx)
             if (access(path, X_OK) == 0) {
                 const char *argv[] = { "/bin/sh", "-c", path, NULL };
                 opkg_msg(DEBUG, "Run intercepted script %s\n", path);
-                xsystem(argv);
+                xsystem_offline_root(argv);
             }
             free(path);
         }
@@ -339,11 +340,6 @@ static int opkg_configure_packages(char *pkg_name)
     opkg_intercept_t ic;
     int r, err = 0;
 
-    if (opkg_config->offline_root && !opkg_config->force_postinstall) {
-        opkg_msg(INFO,
-                 "Offline root mode: not configuring unpacked packages.\n");
-        return 0;
-    }
     opkg_msg(INFO, "Configuring unpacked packages.\n");
 
     all = pkg_vec_alloc();
@@ -381,8 +377,7 @@ static int opkg_configure_packages(char *pkg_name)
                 pkg->state_flag &= ~SF_PREFER;
                 opkg_state_changed++;
             } else {
-                if (!opkg_config->offline_root)
-                    err = -1;
+                err = -1;
             }
         }
     }
@@ -766,8 +761,12 @@ static int opkg_configure_cmd(int argc, char **argv)
 
 static int opkg_clean_cmd(int argc, char **argv)
 {
-    int err;
-    err = rm_r(opkg_config->cache_dir);
+    int err = 0;
+
+    if (!get_bbox_target_name()) {
+        err = rm_r(opkg_config->cache_dir);
+    }
+
     return err;
 }
 

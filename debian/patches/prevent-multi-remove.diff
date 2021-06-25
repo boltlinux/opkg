@@ -1,0 +1,58 @@
+--- a/libopkg/opkg_remove.c
++++ b/libopkg/opkg_remove.c
+@@ -208,7 +208,16 @@
+     int r;
+ 
+     if (opkg_config->download_only)
+-	return 0;
++        return 0;
++
++    /* While remove pkg with '--force-removal-of-dependent-packages',
++     * pkg may be added to remove list multiple times, add status
++     * check to make sure pkg only be removed once. */
++    if (opkg_config->force_removal_of_dependent_packages
++        && pkg->state_flag & SF_FILELIST_CHANGED
++        && pkg->state_status == SS_NOT_INSTALLED)
++        return 0;
++
+     /*
+      * If called from an upgrade and not from a normal remove,
+      * ignore the essential flag.
+--- a/libopkg/solvers/internal/opkg_action.c
++++ b/libopkg/solvers/internal/opkg_action.c
+@@ -53,7 +53,6 @@
+     pkg_t *pkg;
+     pkg_t *pkg_to_remove;
+     pkg_vec_t *available, *pkgs_to_remove;
+-    int done = 0;
+ 
+     available = pkg_vec_alloc();
+     pkgs_to_remove = pkg_vec_alloc();
+@@ -79,13 +78,6 @@
+                 opkg_msg(ERROR, "Package %s not installed.\n", pkg->name);
+                 continue;
+             }
+-            /* While remove pkg with '--force-removal-of-dependent-packages',
+-             * pkg may be added to remove list multiple times, add status
+-             * check to make sure pkg only be removed once. */
+-            if (opkg_config->force_removal_of_dependent_packages
+-                && pkg->state_flag & SF_FILELIST_CHANGED
+-                && pkg->state_status == SS_NOT_INSTALLED)
+-                done = 1;
+ 
+             /* only attempt to remove dependent installed packages if
+              * force_depends is not specified or the package is being
+@@ -133,12 +125,10 @@
+         if (opkg_remove_pkg(pkgs_to_remove->pkgs[i])) {
+             err = -1;
+             break;
+-        } else {
+-            done = 1;
+         }
+     }
+ 
+-    if (done == 0)
++    if (pkgs_to_remove->len == 0)
+         opkg_msg(NOTICE, "No packages removed.\n");
+ 
+     pkg_vec_free(available);

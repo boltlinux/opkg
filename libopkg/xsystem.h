@@ -34,6 +34,7 @@ extern "C" {
    as defined in <sys/wait.h>.
 */
 int xsystem(const char *argv[]);
+int xsystem_offline_root(const char *argv[]);
 
 #ifdef __cplusplus
 }

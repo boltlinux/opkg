@@ -1,0 +1,11 @@
+--- a/libopkg/opkg_archive.c
++++ b/libopkg/opkg_archive.c
+@@ -425,7 +425,7 @@
+         break;
+ 
+     case ARCHIVE_WARN:
+-        opkg_msg(NOTICE, "Warning when extracting archive entry '%s': %s\n",
++        opkg_msg(DEBUG, "Warning when extracting archive entry '%s': %s\n",
+                  archive_entry_pathname(entry), archive_error_string(a));
+         break;
+ 

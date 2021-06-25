@@ -1,0 +1,6 @@
+ssl-curl-without-openssl.patch
+sha256sum-debian-compatible.patch
+force-deps-removal.patch
+archive-warn-debug.patch
+prevent-multi-remove.diff
+curl-resume-downloads.patch

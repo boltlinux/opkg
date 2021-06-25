@@ -1,0 +1,7 @@
+etc/opkg
+etc/opkg/usign
+etc/opkg/usign/trustdb
+usr/share/opkg/usign
+var/cache/opkg
+var/lib/opkg
+var/lib/opkg/info

@@ -21,8 +21,11 @@
 
 #include "config.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #include <libgen.h>
 
@@ -30,6 +33,7 @@
 #include "opkg_message.h"
 #include "opkg_verify.h"
 #include "opkg_utils.h"
+#include "opkg_utils_bolt.h"
 #include "pkg_depends.h"
 
 #include "md5.h"
@@ -119,13 +123,25 @@ static int opkg_download_file(const char *src, const char *dest)
 static int opkg_download_internal(const char *src, const char *dest,
                            curl_progress_func cb, void *data, int use_cache)
 {
-    int ret;
+    int ret = 0;
+    int is_local_file = 0;
+
+    char *download_to_file = (char*) dest;
 
     if (use_cache) {
         ret = file_mkdir_hier(opkg_config->cache_dir, 0755);
-        if (ret != 0)
+        if (ret != 0) {
             opkg_perror(ERROR, "Creating cache dir %s failed",
                     opkg_config->cache_dir);
+            goto cleanup;
+        }
+
+        char *bbox_target_name = get_bbox_target_name();
+
+        if (bbox_target_name) {
+            sprintf_alloc(&download_to_file, "%s#partial-%s",
+                    dest, bbox_target_name);
+        }
     }
 
     opkg_msg(NOTICE, "Downloading %s.\n", src);
@@ -133,16 +149,52 @@ static int opkg_download_internal(const char *src, const char *dest,
     if (str_starts_with(src, "file:")) {
         const char *file_src = src + 5;
 
-        return opkg_download_file(file_src, dest);
+        ret = opkg_download_file(file_src, download_to_file);
+        if (ret != 0) {
+            /* Error message already printed? */
+            goto cleanup;
+        }
+
+        is_local_file = 1;
+    } else {
+        ret = opkg_download_set_env();
+        if (ret != 0) {
+            /* Error message already printed. */
+            goto cleanup;
+        }
+
+        ret = opkg_download_backend(src, download_to_file, cb, data,
+                use_cache);
+        if (ret != 0) {
+            /* Error message already printed? */
+            goto cleanup;
+        }
     }
 
-    ret = opkg_download_set_env();
-    if (ret != 0) {
-        /* Error message already printed. */
-        return ret;
+    if (download_to_file != dest &&
+            (is_local_file || !file_is_symlink(download_to_file)))
+    {
+        ret = rename(download_to_file, dest);
+        if (ret != 0) {
+            opkg_perror(ERROR, "Failed to rename %s to %s",
+                    download_to_file, dest);
+            goto cleanup;
+        }
+
+        char *tmp = xstrdup(dest);
+
+        if(!symlink(basename(tmp), download_to_file)) {
+            /* ignore */
+        }
+
+        free(tmp);
     }
 
-    return opkg_download_backend(src, dest, cb, data, use_cache);
+cleanup:
+    if (download_to_file != dest)
+        free(download_to_file);
+
+    return ret;
 }
 
 /** \brief get_cache_location: generate cached file path
@@ -297,15 +349,25 @@ int opkg_download_pkg(pkg_t * pkg)
 
     pkg->local_filename = get_cache_location(url);
 
-    /* Check if valid package exists in cache */
-    err = pkg_verify(pkg);
-    if (err != 1)
-        goto cleanup;
+    struct stat pkg_stat;
+
+    err = stat(pkg->local_filename, &pkg_stat);
+    if (err) {
+        if (errno != ENOENT) {
+            opkg_msg(ERROR, "Failed to stat %s: %s\n",
+                pkg->local_filename, strerror(errno));
+            goto cleanup;
+        }
+    } else if (pkg_stat.st_size >= pkg->size) {
+        err = pkg_verify(pkg);
+        if (err == 0)
+            goto cleanup;
+    }
 
     err = opkg_download_internal(url, pkg->local_filename, NULL, NULL, 1);
     if (err) {
-	free(pkg->local_filename);
-	pkg->local_filename = NULL;
+        free(pkg->local_filename);
+        pkg->local_filename = NULL;
         goto cleanup;
     }
 
